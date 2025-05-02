@@ -1,50 +1,60 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: laravel_app
-    working_dir: /var/www
-    volumes:
-      - .:/var/www
-    depends_on:
-      - mysql
-    networks:
-      - laravel
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: laravel_app
+        working_dir: /var/www
+        volumes:
+            - .:/var/www
+        depends_on:
+            - mysql
+        networks:
+            - laravel
+        command: >
+            sh -c "
+              composer install &&
+              php artisan config:clear &&
+              php artisan cache:clear &&
+              php artisan view:clear &&
+              chown -R www-data:www-data storage bootstrap/cache &&
+              chmod -R 775 storage bootstrap/cache &&
+              php-fpm
+            "
 
-  mysql:
-    image: mysql:8.0
-    container_name: mysql_db
-    restart: unless-stopped
-    environment:
-      MYSQL_DATABASE: laravel
-      MYSQL_ROOT_PASSWORD: jQ6b7GM2oJfTNeZ
-      MYSQL_USER: laravel
-      MYSQL_PASSWORD: laraveljQ6b7GM2oJfTNeZ
-    volumes:
-      - mysql_data:/var/lib/mysql
-    ports:
-      - 3306:3306
-    networks:
-      - laravel
+    mysql:
+        image: mysql:8.0.28
+        container_name: mysql_db
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: laravel
+            MYSQL_ROOT_PASSWORD: jQ6b7GM2oJfTNeZ
+            MYSQL_USER: laravel
+            MYSQL_PASSWORD: laraveljQ6b7GM2oJfTNeZ
+        volumes:
+            - mysql_data:/var/lib/mysql
+        ports:
+            - 3306:3306
+        networks:
+            - laravel
 
-  nginx:
-    image: nginx:latest
-    container_name: nginx_web
-    ports:
-      - "80:80"
-    volumes:
-      - .:/var/www
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-    depends_on:
-      - app
-    networks:
-      - laravel
+    nginx:
+        image: nginx:latest
+        container_name: nginx_web
+        ports:
+            - "80:80"
+        volumes:
+            - .:/var/www
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+        depends_on:
+            - app
+        networks:
+            - laravel
 
 networks:
-  laravel:
+    laravel:
 
 volumes:
-  mysql_data:
+    mysql_data:

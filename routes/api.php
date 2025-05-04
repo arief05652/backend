@@ -10,15 +10,3 @@ Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthSystem::class, 'login']);
     Route::get('/logout', [AuthSystem::class, 'logout'])->middleware('auth:sanctum');
 });
-
-Route::post('/test', function(Request $request){
-    $data = $request->validate([
-        "name" => 'string',
-        "age" => 'string'
-    ]);
-
-    return response()->json([
-        "message" => "Post success",
-        "data" => $data
-    ]);
-});

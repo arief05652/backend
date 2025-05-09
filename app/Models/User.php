@@ -6,24 +6,38 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens;
 
-    protected $primaryKey = 'user_id';
+    protected $table = 'users';
+    protected $primaryKey = 'id';
     public $incrementing = false;
     protected $keyType = 'string';
 
     protected $fillable = [
-        "user_id",
-        "nama_depan",
-        "nama_belakang",
+        "first_name",
+        "last_name",
         "email",
-        "no_hp",
+        "phone",
         "password",
     ];
+
+    protected $hidden = [
+        'password', 'role',
+        'email_verified_at', 'updated_at'
+    ];
+
+    public function reservation(): HasMany {
+        return $this->hasMany(Reservation::class, 'user_id');
+    }
+
+    public function log_reservasi(): HasMany {
+        return $this->hasMany(LogReservation::class, 'user_id');
+    }
 
     protected static function boot()
     {
@@ -36,5 +50,4 @@ class User extends Authenticatable
             }
         });
     }
-
 }

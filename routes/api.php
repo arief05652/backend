@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthSystem;
 use App\Http\Controllers\ReservationSystem;
+use App\Http\Controllers\TableSystem;
 use App\Http\Controllers\UserSystem;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +16,8 @@ Route::prefix('auth')->group(function () { // base path
 // USER SELECTION
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('user')->group(function () { // base path
-        Route::get('/users/{id}', [UserSystem::class, 'user_by_id']); // select user by id
-        Route::put('/users-update/{id}', [UserSystem::class, 'update_user']); // update data user
+        Route::get('/show-user', [UserSystem::class, 'show_user']); // select user by id
+        Route::patch('/users-update', [UserSystem::class, 'update_user']); // update data user
+        Route::patch('/update-role', [UserSystem::class, 'update_role']);
     });
 });

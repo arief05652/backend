@@ -18,7 +18,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('user')->group(function () { // base path
         Route::get('/show-user', [UserSystem::class, 'show_user']); // select user by id
         Route::patch('/users-update', [UserSystem::class, 'update_user']); // update data user
-        Route::patch('/update-role', [UserSystem::class, 'update_role']);
+        Route::patch('/update-role', [UserSystem::class, 'update_role']); // update role user
     });
 });
 

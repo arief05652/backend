@@ -7,18 +7,21 @@ use Illuminate\Support\Facades\DB;
 
 class UserSystem extends Controller
 {
-    public function user_by_id($id) {
+    public function show_user(Request $request) {
+        $id = $request->validate(['id' => 'string|required']);
+
         $data = DB::table('users')
             ->select(
                 'id', 'first_name', 'last_name',
                 'email', 'phone', 'role'
             )
-            ->where('id', $id)->first();
-        return response()->json(['data' => $data], 200);
+            ->where('id', '=', $id)->first();
+        return response()->json($data, 200);
     }
 
-    public function update_user(Request $request, $id) {
+    public function update_user(Request $request) {
         $data = $request->validate([
+            'id' => 'required|string',
             'first_name' => 'required|string|max:20',
             'last_name' => 'required|string|max:20|nullable',
             'email' => 'required|string|email',
@@ -26,7 +29,7 @@ class UserSystem extends Controller
         ]);
 
         DB::table('users')
-            ->where('id', $id)
+            ->where('id', '=', $data['id'])
             ->update([
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
@@ -35,5 +38,18 @@ class UserSystem extends Controller
             ]);
 
         return response()->json(['message' => 'Sukses update user'], 200);
+    }
+
+    public function update_role(Request $request) {
+        $data = $request->validate([
+            'id' => 'string|required',
+            'role' => 'required|string'
+        ]);
+
+        DB::table('users')
+            ->where('id', '=', $data['id'])
+            ->update(['role' => $data['role']]);
+        
+        return response()->json(['message' => 'Sukses update role user']);
     }
 }

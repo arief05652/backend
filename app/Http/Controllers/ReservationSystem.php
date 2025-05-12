@@ -125,6 +125,7 @@ class ReservationSystem extends Controller
             'reserve_at' => $check_data->reserve_at
         ]);
 
+        DB::table('table')->where('code', '=', $check_data->code)->update(['status' => 'tersedia']);
         DB::table('reservation')->where('id', '=', $body['reservation_id'])->delete();
 
         return response()->json(['message' => 'Status reservasi anda telah ditutup']);
@@ -153,7 +154,7 @@ class ReservationSystem extends Controller
             'status' => $check_data->status,
             'reserve_at' => $check_data->reserve_at
         ]);
-
+        DB::table('table')->where('code', '=', $check_data->code)->update(['status' => 'tersedia']);
         DB::table('reservation')->where('id', '=', $body['reservation_id'])->delete();
 
         return response()->json(['message' => 'Reservasi berhasil di cancel']);

@@ -31,3 +31,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::delete('/delete-table/{id}', [TableSystem::class, 'delete_table']); // delete table 
     });
 });
+
+// RESERVATION SYSTEM
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::prefix('reserve')->group(function () {
+        Route::post('/add-reserve', [ReservationSystem::class, 'add_reserve']); // user booking table
+        Route::get('/check-user', [ReservationSystem::class, 'check_in_reserve']); // check-in user by pelayan
+        Route::get('/show-reservation', [ReservationSystem::class, 'show_user_reserve']); // show all active reservation
+        Route::post('/done-reserve', [ReservationSystem::class, 'done_reservation']); // change status and close menu
+        Route::post('/cancel-reserve', [ReservationSystem::class, 'cancel_reservation']); // cancel reservation
+    });
+});

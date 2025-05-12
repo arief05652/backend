@@ -25,7 +25,7 @@ class TableSystem extends Controller
             }
         } else {
             $data = DB::table('table')  
-                ->select('id', 'code', 'capacity', 'status')
+                ->select('id as table_id', 'code', 'capacity', 'status')
                 ->get();
             if ($data->isEmpty()){
                 return response()->json(['message' => 'Tidak ada data'], 404);

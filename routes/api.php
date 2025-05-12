@@ -32,6 +32,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 });
 
+// TABLE SYSTEM
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::prefix('table')->group(function () {
+        Route::get('/show-table', [TableSystem::class, 'show_table']); // show table
+        Route::post('/add-table', [TableSystem::class, 'add_table']); // tambah table baru
+        Route::patch('/update-table', [TableSystem::class, 'update_table']); // update current table
+        Route::delete('/delete-table/{id}', [TableSystem::class, 'delete_table']); // delete table 
+    });
+});
+
 // RESERVATION SYSTEM
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('reserve')->group(function () {

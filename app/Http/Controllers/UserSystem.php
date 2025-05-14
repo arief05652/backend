@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 class UserSystem extends Controller
 {
     public function show_user(Request $request) {
-        $id = $request->validate(['id' => 'string|required']);
+        $id = $request->query('id');
 
         $data = DB::table('users')
             ->select(

@@ -101,14 +101,12 @@ class ReservationSystem extends Controller
     }
 
     public function done_reservation(Request $request) {
-        $body = $request->validate([
-            'reservation_id' => 'required|string',
-        ]);
+        $reservation_id = $request->query('reservation_id');
 
-        DB::table('reservation')->where('id', '=', $body['reservation_id'])
+        DB::table('reservation')->where('id', '=', $reservation_id)
             ->update(['status' => 'complete']);
 
-        $check_data = DB::table('reservation')->where('reservation.id', '=', $body['reservation_id'])
+        $check_data = DB::table('reservation')->where('reservation.id', '=', $reservation_id)
             ->join('table', 'table.id', '=', 'reservation.table_id')
             ->select('reservation.user_id', 'reservation.status', 'table.code', 
             'reservation.capacity', 'reservation.notes', 'reservation.reserve_at')
@@ -125,20 +123,18 @@ class ReservationSystem extends Controller
         ]);
 
         DB::table('table')->where('code', '=', $check_data->code)->update(['status' => 'tersedia']);
-        DB::table('reservation')->where('id', '=', $body['reservation_id'])->delete();
+        DB::table('reservation')->where('id', '=', $reservation_id)->delete();
 
         return response()->json(['message' => 'Status reservasi anda telah ditutup']);
     }
 
     public function cancel_reservation(Request $request) {
-        $body = $request->validate([
-            'reservation_id' => 'string|required'
-        ]);
+        $reservation_id = $request->query('reservation_id');
 
-        DB::table('reservation')->where('id', '=', $body['reservation_id'])
+        DB::table('reservation')->where('id', '=', $reservation_id)
             ->update(['status' => 'cancelled']);
 
-        $check_data = DB::table('reservation')->where('reservation.id', '=', $body['reservation_id'])
+        $check_data = DB::table('reservation')->where('reservation.id', '=', $reservation_id)
             ->join('table', 'table.id', '=', 'reservation.table_id')
             ->select('reservation.user_id', 'reservation.status', 'table.code', 
             'reservation.capacity', 'reservation.notes', 'reservation.reserve_at')
@@ -154,7 +150,7 @@ class ReservationSystem extends Controller
             'reserve_at' => $check_data->reserve_at
         ]);
         DB::table('table')->where('code', '=', $check_data->code)->update(['status' => 'tersedia']);
-        DB::table('reservation')->where('id', '=', $body['reservation_id'])->delete();
+        DB::table('reservation')->where('id', '=', $reservation_id)->delete();
 
         return response()->json(['message' => 'Reservasi berhasil di cancel']);
 

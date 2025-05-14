@@ -51,7 +51,7 @@ class ReservationSystem extends Controller
             ->get();
 
         if ($check_data->isEmpty()) {
-            return response()->json(['message' => 'Reservation ID tidak ditemukan']);
+            return response()->json(['message' => 'Reservation ID tidak ditemukan'], 404);
         }
 
         DB::table('reservation')->update([
@@ -153,6 +153,17 @@ class ReservationSystem extends Controller
         DB::table('reservation')->where('id', '=', $reservation_id)->delete();
 
         return response()->json(['message' => 'Reservasi berhasil di cancel']);
+    }
 
+    public function show_histori_reservation(Request $request) {
+        $user_id = $request->query('user_id');
+
+        $data = DB::table('log_reservation')->select('*')
+            ->where('log_reservation.user_id', '=', $user_id)->get();
+        
+        if ($data->isEmpty()){
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);    
+        }
+        return response()->json($data);
     }
 }

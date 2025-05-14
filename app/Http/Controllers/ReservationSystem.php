@@ -44,7 +44,7 @@ class ReservationSystem extends Controller
     }
 
     public function check_in_reserve(Request $request) {
-        $body = $request->validate(['reservation_id' => 'string|required']);
+        $body = $request->query('reservation_id');
 
         $check_data = DB::table('reservation')
             ->select('id')->where('id', '=', $body['reservation_id'])
@@ -62,13 +62,9 @@ class ReservationSystem extends Controller
     }
 
     public function show_user_reserve(Request $request) {
-        $body = $request->validate([
-            'status' => 'nullable|string'
-        ]);
+        $status = $request->query('status');
 
-        $status = $body['status'] ?? null;
-
-        if (!$status) {
+        if ($status === null) {
             $data = DB::table('reservation')
                 ->join('users', 'users.id', '=', 'reservation.user_id')
                 ->join('table', 'table.id', '=', 'reservation.table_id')
@@ -80,7 +76,10 @@ class ReservationSystem extends Controller
                     'table.code as table_code', 
                     'reservation.status as status_reservation',
                     'reservation.schedule as schedule_reserve', 
-                    'reservation.capacity')->get();  
+                    'reservation.capacity')->get(); 
+            if ($data->isEmpty()) {
+                return response()->json(['message' => 'Data tidak ditemukan'], 404);
+            }
         } else {
             $data = DB::table('reservation')->where('reservation.status', '=', $status)
                 ->join('users', 'users.id', '=', 'reservation.user_id')

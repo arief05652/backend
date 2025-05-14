@@ -9,15 +9,11 @@ use Illuminate\Support\Facades\DB;
 class TableSystem extends Controller
 {
     public function show_table(Request $request) {
-        $valid = $request->validate([
-            'status' => 'string|max:20'
-        ]);
-
-        $status = $valid['status'] ?? null;
+        $status = $request->query('status');
 
         if ($status !== null) {
             $data = DB::table('table')  
-                ->select('id', 'code', 'capacity', 'status')
+                ->select('id as table_id', 'code', 'capacity', 'status')
                 ->where('status', '=', $status)
                 ->get();
             if ($data->isEmpty()){
@@ -26,7 +22,6 @@ class TableSystem extends Controller
         } else {
             $data = DB::table('table')  
                 ->select('id as table_id', 'code', 'capacity', 'status')
-                ->select('id', 'code', 'capacity', 'status')
                 ->get();
             if ($data->isEmpty()){
                 return response()->json(['message' => 'Tidak ada data'], 404);
@@ -84,7 +79,9 @@ class TableSystem extends Controller
         ]);
     }
 
-    public function delete_table($id) {
+    public function delete_table(Request $request) {
+        $id = $request->query('table_id');
+        
         DB::table('table')
             ->where('id', '=', $id)
             ->delete();

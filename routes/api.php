@@ -19,16 +19,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/show-user', [UserSystem::class, 'show_user']); // select user by id
         Route::patch('/users-update', [UserSystem::class, 'update_user']); // update data user
         Route::patch('/update-role', [UserSystem::class, 'update_role']); // update role user
-    });
-});
-
-// TABLE SYSTEM
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::prefix('table')->group(function () {
-        Route::get('/show-table', [TableSystem::class, 'show_table']); // show table
-        Route::post('/add-table', [TableSystem::class, 'add_table']); // tambah table baru
-        Route::patch('/update-table', [TableSystem::class, 'update_table']); // update current table
-        Route::delete('/delete-table', [TableSystem::class, 'delete_table']); // delete table 
+        Route::get('/show-history-reserve', [ReservationSystem::class, 'show_histori_reservation']); // show history reservation user
     });
 });
 

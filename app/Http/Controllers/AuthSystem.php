@@ -11,7 +11,7 @@ class AuthSystem extends Controller
     public function login(Request $request) {
         $data = $request->validate([
             "email" => 'required|string|email',
-            "password" => 'required|string'
+            "password" => 'required|string|max:255'
         ]);
 
         $user = User::where("email", $data['email'])->first();
@@ -38,8 +38,8 @@ class AuthSystem extends Controller
 
     public function register(Request $request) {
         $data = $request->validate([
-            "first_name" => 'required|string|max:25',
-            "last_name" => 'nullable|string|max:25',
+            "first_name" => 'required|string|max:20',
+            "last_name" => 'nullable|string|max:20',
             "email" => 'required|string|email',
             "phone" => 'required|string|max:15',
             "password" => 'required|string|max:255'

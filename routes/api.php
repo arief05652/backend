@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthSystem;
 use App\Http\Controllers\MenuSystem;
+use App\Http\Controllers\OrderedSystem;
 use App\Http\Controllers\ReservationSystem;
 use App\Http\Controllers\TableSystem;
 use App\Http\Controllers\UserSystem;
@@ -22,7 +23,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::patch('/update-role', [UserSystem::class, 'update_role']); // update role user
         Route::get('/show-history-reserve', [ReservationSystem::class, 'show_histori_reservation']); // show history reservation user
     });
-
 
     // TABLE SYSTEM
     Route::prefix('table')->group(function () {
@@ -47,5 +47,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/add-menu', [MenuSystem::class, 'added_menu']); // menambahkan menu
         Route::patch('/update-menu/{id}', [MenuSystem::class, 'update_menu']); // update menu
         Route::delete('/delete-menu', [MenuSystem::class, 'delete_menu']); // hapus menu
+    }); 
+
+    // ORDER SYSTEM
+     Route::prefix('order')->group(function () {
+        Route::post('/make-order', [OrderedSystem::class, 'make_order']); // pelanggan memesan
+        Route::get('/show-order', [OrderedSystem::class, 'show_order']); // get order user
     }); 
 });

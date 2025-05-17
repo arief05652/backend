@@ -23,8 +23,8 @@ return new class extends Migration
 
         Schema::create('order', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('menu_id')->constrained('menu')->onDelete('cascade');
-            $table->foreignUuid('user_id')->constrained('user')->onDelete('cascade');
+            $table->foreignUuid('menu_id')->constrained('menus')->onDelete('cascade');
+            $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
             $table->integer('quantity');
             $table->string('notes', 255)->nullable();
             $table->enum('status', ['pending', 'preparing', 'ready'])->default('pending');

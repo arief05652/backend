@@ -24,8 +24,7 @@ class UserSystem extends Controller
             'id' => 'required|string',
             'first_name' => 'required|string|max:20',
             'last_name' => 'required|string|max:20|nullable',
-            'email' => 'required|string|email',
-            'phone' => 'required|string|max:15',
+            'password' => 'required|string|max:255'
         ]);
 
         DB::table('users')
@@ -33,11 +32,10 @@ class UserSystem extends Controller
             ->update([
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
-                'email' => $data['email'],
-                'phone' => $data['phone']
+                'password' => $data['password']
             ]);
 
-        return response()->json(['message' => 'Sukses update user'], 200);
+        return response()->json(['message' => 'Berhasil update akun'], 200);
     }
 
     public function update_role(Request $request) {
@@ -50,6 +48,6 @@ class UserSystem extends Controller
             ->where('id', '=', $data['id'])
             ->update(['role' => $data['role']]);
         
-        return response()->json(['message' => 'Sukses update role user']);
+        return response()->json(['message' => 'Berhasil update role']);
     }
 }

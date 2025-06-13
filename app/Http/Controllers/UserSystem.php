@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserSystem extends Controller
 {
@@ -32,7 +33,7 @@ class UserSystem extends Controller
             ->update([
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
-                'password' => $data['password']
+                'password' =>  Hash::make($data["password"])
             ]);
 
         return response()->json(['message' => 'Berhasil update akun'], 200);
